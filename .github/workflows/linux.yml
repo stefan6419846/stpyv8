@@ -15,7 +15,7 @@ jobs:
     name: Build Google V8
     runs-on: ubuntu-latest
     container:
-      image: quay.io/pypa/manylinux_2_31_x86_64:latest
+      image: quay.io/pypa/manylinux_2_28_x86_64
     outputs:
       v8-hash: ${{ steps.build-v8.outputs.v8-hash }}
     steps:
@@ -66,7 +66,7 @@ jobs:
     needs: build-v8
     runs-on: ubuntu-latest
     container:
-      image: quay.io/pypa/manylinux_2_31_x86_64:latest
+      image: quay.io/pypa/manylinux_2_28_x86_64
     env:
       DIST_NAME: stpyv8-linux-py${{ matrix.python-version }}
       STPYV8_BOOST_PYTHON: boost_python${{ matrix.python-version }}
