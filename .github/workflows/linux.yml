@@ -13,14 +13,16 @@ jobs:
     # Cloning the repository is still necessary in any case
     # to calculate the hash for the cache key
     name: Build Google V8
-    runs-on: ubuntu-22.04
+    runs-on: ubuntu-latest
+    container:
+      image: quay.io/pypa/manylinux_2_31_x86_64:latest
     outputs:
       v8-hash: ${{ steps.build-v8.outputs.v8-hash }}
     steps:
       - name: Checkout
-        uses: actions/checkout@v4
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1  # v7.0.1
       - name: Set up Python
-        uses: actions/setup-python@v5
+        uses: actions/setup-python@5fda3b95a4ea91299a34e894583c3862153e4b97  # v7.0.0
         with:
           python-version: '3.x'
       - name: Clone Google V8
@@ -31,7 +33,7 @@ jobs:
           echo "::endgroup::"
       - name: Restore Google V8 from cache
         id: restore-v8
-        uses: actions/cache/restore@main
+        uses: actions/cache/restore@55cc8345863c7cc4c66a329aec7e433d2d1c52a9  # v6.1.0
         with:
           path: |
             v8/out.gn/x64.release.sample/obj/libv8_monolith.a
@@ -49,7 +51,7 @@ jobs:
           python setup.py v8
           echo "::endgroup::"
       - name: Save Google V8 to cache
-        uses: actions/cache/save@main
+        uses: actions/cache/save@55cc8345863c7cc4c66a329aec7e433d2d1c52a9  # v6.1.0
         if: ${{ steps.restore-v8.outputs.cache-hit != 'true' }}
         with:
           # Save compiled binary and header files. This will save an
@@ -62,26 +64,27 @@ jobs:
   build:
     name: Build Linux wheel (Python ${{ matrix.python-version }})
     needs: build-v8
-    runs-on: ${{ matrix.os }}
+    runs-on: ubuntu-latest
+    container:
+      image: quay.io/pypa/manylinux_2_31_x86_64:latest
     env:
       DIST_NAME: stpyv8-linux-py${{ matrix.python-version }}
       STPYV8_BOOST_PYTHON: boost_python${{ matrix.python-version }}
     strategy:
       matrix:
-        os: [ubuntu-22.04]
         python-version: ['3.10', '3.11', '3.12', '3.13', '3.14']
         boost-version: [1.87.0]
         boost-version-snake: ['1_87_0']
     steps:
       - name: Checkout repository
-        uses: actions/checkout@v4
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1  # v7.0.1
       - name: Set up Python
-        uses: actions/setup-python@v5
+        uses: actions/setup-python@5fda3b95a4ea91299a34e894583c3862153e4b97  # v7.0.0
         with:
           python-version: ${{ matrix.python-version }}
       - name: Download Boost
         id: download-boost
-        uses: suisei-cn/actions-download-file@v1.6.0
+        uses: suisei-cn/actions-download-file@9f75b8c2dad5ccced7509c44a3b881c5613abde2  # v1.6.1
         with:
           url: https://archives.boost.io/release/${{ matrix.boost-version }}/source/boost_${{matrix.boost-version-snake }}.zip
       - name: Install Boost
@@ -90,10 +93,10 @@ jobs:
           unzip -q ${{ steps.download-boost.outputs.filename }}
           cd boost_${{ matrix.boost-version-snake }}
           ./bootstrap.sh
-          sudo ./b2 install -j 8 --with-system --with-python --with-filesystem --with-iostreams --with-date_time --with-thread
+          ./b2 install -j 8 --with-system --with-python --with-filesystem --with-iostreams --with-date_time --with-thread
       - name: Restore Google V8 from cache
         id: restore-v8
-        uses: actions/cache/restore@main
+        uses: actions/cache/restore@55cc8345863c7cc4c66a329aec7e433d2d1c52a9  # v6.1.0
         with:
           path: |
             v8/out.gn/x64.release.sample/obj/libv8_monolith.a
@@ -113,6 +116,7 @@ jobs:
           LDFLAGS: -L/usr/lib -L/usr/lib/x86_64-linux-gnu
       - name: Repair wheel
         run: |
+          auditwheel show stpyv8-linux-wheelhouse-${{ matrix.python-version }}/*.whl
           auditwheel repair --plat manylinux_2_31_x86_64 -w stpyv8-linux-${{ matrix.python-version }} stpyv8-linux-wheelhouse-${{ matrix.python-version }}/*.whl
       - name: Install wheel
         run: |
@@ -121,16 +125,16 @@ jobs:
         run: |
           pytest -v
       - name: Upload wheel
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a  # v7.0.1
         with:
           name: stpyv8-linux-python${{ matrix.python-version }}
           path: stpyv8-linux-${{ matrix.python-version }}/*.whl
-      - name: Release
-        uses: softprops/action-gh-release@v2
-        if: ${{ github.event_name == 'release' }}
-        with:
-          files: stpyv8-linux-${{ matrix.python-version }}/*.whl
-          token: ${{ secrets.GITHUB_TOKEN }}
+      #- name: Release
+      #  uses: softprops/action-gh-release@v2
+      #  if: ${{ github.event_name == 'release' }}
+      #  with:
+      #    files: stpyv8-linux-${{ matrix.python-version }}/*.whl
+      #    token: ${{ secrets.GITHUB_TOKEN }}
   pypi-publish:
     name: Upload release to PyPI
     if: ${{ github.event_name == 'release' }}
