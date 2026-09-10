@@ -34,6 +34,7 @@ jobs:
             python3-dev \
             python3-pip \
             python3-venv \
+            sudo \
             unzip
       - name: Set up Python environment
         run: |
