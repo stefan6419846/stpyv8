@@ -34,6 +34,10 @@ jobs:
             python3-dev \
             python3-pip \
             unzip
+      - name: Set up Python environment
+        run: |
+          python3 -m venv /opt/stpyv8-venv
+          echo "/opt/stpyv8-venv/bin" >> "$GITHUB_PATH"
       - name: Check environment
         run: |
           cat /etc/os-release
