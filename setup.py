@@ -252,7 +252,6 @@ setup(
     py_modules=["STPyV8"],
     ext_modules=[stpyv8],
     install_requires=["importlib_resources; python_version < '3.10'"],
-    setup_requires=["wheel"],
     data_files=[
         (ICU_DATA_PACKAGE_FOLDER, [ICU_DATA_V8_FILE_PATH]),
     ],
