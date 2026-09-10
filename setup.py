@@ -5,9 +5,9 @@ import shutil
 import subprocess
 
 from setuptools import setup, Extension
+from setuptools.command.bdist_wheel import bdist_wheel
 from setuptools.command.build_ext import build_ext
 from setuptools.command.install import install
-from wheel.bdist_wheel import bdist_wheel
 
 from settings import *  # pylint:disable=wildcard-import,unused-wildcard-import
 
@@ -250,7 +250,7 @@ setup(
     platforms=["Linux", "MacOS", "Windows"],
     author="Philip Syme, Angelo Dell'Aera",
     url="https://github.com/cloudflare/stpyv8",
-    license="Apache License 2.0",
+    license_expression="Apache-2.0",
     py_modules=["STPyV8"],
     ext_modules=[stpyv8],
     install_requires=["importlib_resources; python_version < '3.10'"],
@@ -263,7 +263,6 @@ setup(
         "Environment :: Plugins",
         "Intended Audience :: Developers",
         "Intended Audience :: System Administrators",
-        "License :: OSI Approved :: Apache Software License",
         "Natural Language :: English",
         "Programming Language :: C++",
         "Programming Language :: Python",
