@@ -49,7 +49,7 @@ jobs:
           ldd --version
       - name: Clone Google V8
         run: |
-          python3 -m pip install setuptools wheel
+          python3 -m pip install --upgrade setuptools wheel
           echo "::group::Clone Google V8"
           python3 setup.py checkout_v8
           echo "::endgroup::"
