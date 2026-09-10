@@ -29,6 +29,14 @@ jobs:
       - name: Set Python
         run: |
           echo "/opt/python/${INTERPRETER_PATH}/bin" >> "$GITHUB_PATH"
+      - name: Install V8 build dependencies
+        run: |
+          dnf install -y redhat-lsb-core
+      - name: Check environment
+        run: |
+          python --version
+          pip --version
+          lsb_release -a
       - name: Clone Google V8
         run: |
           python -m pip install setuptools wheel
