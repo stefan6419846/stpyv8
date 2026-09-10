@@ -59,8 +59,6 @@ def install_depot():
             msg="Cloning depot tools",
         )
 
-        return
-
     # depot_tools updates itself automatically when running gclient tool
     if os.path.isfile(os.path.join(DEPOT_HOME, "gclient")):
         success, stdout, __ = exec_cmd(
