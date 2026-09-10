@@ -28,6 +28,7 @@ jobs:
             build-essential \
             ca-certificates \
             curl \
+            file \
             git \
             lsb-release \
             python3 \
