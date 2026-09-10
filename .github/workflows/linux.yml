@@ -15,22 +15,12 @@ jobs:
     name: Build Google V8
     runs-on: ubuntu-latest
     container:
-      image: debian:11-slim
+      image: debian:12-slim
     outputs:
       v8-hash: ${{ steps.build-v8.outputs.v8-hash }}
     steps:
       - name: Checkout
         uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1  # v7.0.1
-      - name: Configure Debian repositories
-        run: |
-          cat > /etc/apt/sources.list <<'EOF'
-          deb http://deb.debian.org/debian bullseye main
-          deb http://deb.debian.org/debian bullseye-updates main
-          deb http://security.debian.org/debian-security bullseye-security main
-          EOF
-
-          apt-get clean
-          rm -rf /var/lib/apt/lists/*
       - name: Install dependencies
         run: |
           apt-get update
@@ -93,7 +83,7 @@ jobs:
     needs: build-v8
     runs-on: ubuntu-latest
     container:
-      image: debian:11-slim
+      image: debian:12-slim
     env:
       DIST_NAME: stpyv8-linux-py${{ matrix.python-version }}
       STPYV8_BOOST_PYTHON: boost_python${{ matrix.python-version }}
