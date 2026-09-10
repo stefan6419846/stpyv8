@@ -15,7 +15,7 @@ jobs:
     name: Build Google V8
     runs-on: ubuntu-latest
     container:
-      image: debian:11
+      image: debian:11-slim
     outputs:
       v8-hash: ${{ steps.build-v8.outputs.v8-hash }}
     steps:
@@ -83,7 +83,7 @@ jobs:
     needs: build-v8
     runs-on: ubuntu-latest
     container:
-      image: debian:11
+      image: debian:11-slim
     env:
       DIST_NAME: stpyv8-linux-py${{ matrix.python-version }}
       STPYV8_BOOST_PYTHON: boost_python${{ matrix.python-version }}
