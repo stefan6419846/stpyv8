@@ -21,10 +21,11 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1  # v7.0.1
-      - name: Set up Python
-        uses: actions/setup-python@5fda3b95a4ea91299a34e894583c3862153e4b97  # v7.0.0
-        with:
-          python-version: '3.x'
+      - name: Set interpreter path
+        run: |
+          echo "INTERPRETER_PATH=cp${PYTHON}-cp${PYTHON}" >> $GITHUB_ENV
+        env:
+          PYTHON: '3.14'
       - name: Clone Google V8
         run: |
           python -m pip install setuptools wheel
@@ -78,10 +79,11 @@ jobs:
     steps:
       - name: Checkout repository
         uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1  # v7.0.1
-      - name: Set up Python
-        uses: actions/setup-python@5fda3b95a4ea91299a34e894583c3862153e4b97  # v7.0.0
-        with:
-          python-version: ${{ matrix.python-version }}
+      - name: Set interpreter path
+        run: |
+          echo "INTERPRETER_PATH=cp${PYTHON}-cp${PYTHON}" >> $GITHUB_ENV
+        env:
+          PYTHON: ${{ matrix.python-version }}
       - name: Download Boost
         id: download-boost
         uses: suisei-cn/actions-download-file@9f75b8c2dad5ccced7509c44a3b881c5613abde2  # v1.6.1
