@@ -128,7 +128,7 @@ jobs:
             boost-version-snake: '1_87_0'
             manylinux-platform: 'manylinux_2_39_x86_64'
           - python-version: '3.14'
-            image: 'debian:14-slim'
+            image: 'debian:forky-slim'  # Debian 14
             boost-version: '1.87.0'
             boost-version-snake: '1_87_0'
             manylinux-platform: 'manylinux_2_39_x86_64'
