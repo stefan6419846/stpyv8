@@ -55,6 +55,10 @@ jobs:
           echo "::group::Clone Google V8"
           python3 setup.py checkout_v8
           echo "::endgroup::"
+      - name: Calculate Google V8 hash
+        id: v8-hash
+        run: |
+          echo "v8-hash=${{ hashFiles('v8/src/**') }}" >> "$GITHUB_OUTPUT"
       - name: Restore Google V8 from cache
         id: restore-v8
         uses: actions/cache/restore@55cc8345863c7cc4c66a329aec7e433d2d1c52a9  # v6.1.0
@@ -63,7 +67,7 @@ jobs:
             v8/out.gn/x64.release.sample/obj/libv8_monolith.a
             v8/out.gn/x64.release.sample/icudtl.dat
             v8/include
-          key: linux-build-v8-${{ hashFiles('v8/src/**') }}
+          key: linux-build-v8-${{ steps.v8-hash.outputs.v8-hash }}
       - name: Build Google V8
         id: build-v8
         if: ${{ steps.restore-v8.outputs.cache-hit != 'true' }}
@@ -84,7 +88,7 @@ jobs:
             v8/out.gn/x64.release.sample/obj/libv8_monolith.a
             v8/out.gn/x64.release.sample/icudtl.dat
             v8/include
-          key: linux-build-v8-${{ hashFiles('v8/src/**') }}
+          key: linux-build-v8-${{ steps.v8-hash.outputs.v8-hash }}
   build:
     name: Build Linux wheel (Python ${{ matrix.python-version }})
     needs: build-v8
