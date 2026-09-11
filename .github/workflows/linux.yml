@@ -156,7 +156,7 @@ jobs:
         run: |
           unzip -q ${{ steps.download-boost.outputs.filename }}
           cd boost_${{ matrix.boost-version-snake }}
-          ./bootstrap.sh
+          ./bootstrap.sh --with-libraries=python
           sudo ./b2 install -j 8 --with-system --with-python --with-filesystem --with-iostreams --with-date_time --with-thread
       - name: Check Boost.Python
         run:
