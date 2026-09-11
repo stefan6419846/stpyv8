@@ -160,6 +160,8 @@ jobs:
           path: .
       - name: Verify Google V8 artifact
         run: |
+          ls -l
+          ls -l v8
           test -f v8/out.gn/x64.release.sample/obj/libv8_monolith.a
           test -f v8/out.gn/x64.release.sample/icudtl.dat
           test -d v8/include
