@@ -137,6 +137,13 @@ jobs:
         uses: actions/setup-python@5fda3b95a4ea91299a34e894583c3862153e4b97  # v7.0.0
         with:
           python-version: ${{ matrix.python-version }}
+      - name: Check Python
+        run: |
+          which python
+          python --version
+          python -c 'import sys; print(sys.executable)'
+          python -c 'import sysconfig; print(sysconfig.get_path("include"))'
+          python -c 'import sysconfig; print(sysconfig.get_config_var("LIBDIR"))'
       - name: Download Boost
         id: download-boost
         uses: suisei-cn/actions-download-file@9f75b8c2dad5ccced7509c44a3b881c5613abde2  # v1.6.1
@@ -147,7 +154,7 @@ jobs:
         run: |
           unzip -q ${{ steps.download-boost.outputs.filename }}
           cd boost_${{ matrix.boost-version-snake }}
-          ./bootstrap.sh
+          ./bootstrap.sh --wit-python
           sudo ./b2 install -j 8 --with-system --with-python --with-filesystem --with-iostreams --with-date_time --with-thread
       - name: Check Boost.Python
         run:
