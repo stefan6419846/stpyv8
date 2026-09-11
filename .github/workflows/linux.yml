@@ -147,6 +147,10 @@ jobs:
             v8/out.gn/x64.release.sample/icudtl.dat
             v8/include
           key: linux-build-v8-${{ needs.build-v8.outputs.v8-hash }}
+      - name: Set up Python environment
+        run: |
+          python3 -m venv /opt/stpyv8-venv
+          echo "/opt/stpyv8-venv/bin" >> "$GITHUB_PATH"
       - name: Install dependencies
         run: |
           pip install --upgrade pip setuptools wheel auditwheel patchelf pytest pytest-order
