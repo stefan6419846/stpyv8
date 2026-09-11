@@ -121,7 +121,7 @@ jobs:
             image: 'ubuntu:24.04'
             boost-version: '1.87.0'
             boost-version-snake: '1_87_0'
-            manylinux-platform: 'manylinux_2_1_x86_64'
+            manylinux-platform: 'manylinux_2_39_x86_64'
           - python-version: '3.13'
             image: 'debian:13-slim'
             boost-version: '1.87.0'
