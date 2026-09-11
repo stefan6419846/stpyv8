@@ -166,9 +166,6 @@ jobs:
           echo "icudtl.dat exists"
           test -d v8/include
           echo "include directory exists"
-
-          echo "V8 binary:"
-          ls -lh v8/out.gn/x64.release.sample/obj/libv8_monolit
       - name: Set up Python environment
         run: |
           python3 -m venv /opt/stpyv8-venv
