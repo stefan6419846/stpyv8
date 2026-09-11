@@ -193,15 +193,14 @@ jobs:
         run: |
           tar -xJf ${{ steps.download-boost.outputs.filename }}
           cd boost-${{ matrix.boost-version }}
-          ./bootstrap.sh --with-libraries=python
+          ./bootstrap.sh
           sudo ./b2 install -j 8 \
             --with-system \
             --with-python \
             --with-filesystem \
             --with-iostreams \
             --with-date_time \
-            --with-thread \
-            --without-histogram
+            --with-thread
       - name: Check Boost.Python
         run:
           ls -l /usr/local/lib/libboost*
