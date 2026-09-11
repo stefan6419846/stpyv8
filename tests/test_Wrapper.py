@@ -941,11 +941,11 @@ class TestWrapper(unittest.TestCase):
 
                 obj = Hello()
 
-                self.assertEqual(2, sys.getrefcount(obj))
+                initial_refcount = sys.getrefcount(obj)
 
                 fn(obj)
 
-                self.assertEqual(4, sys.getrefcount(obj))
+                self.assertEqual(initial_refcount + 2, sys.getrefcount(obj))
 
                 del obj
 
