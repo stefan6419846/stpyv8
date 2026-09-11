@@ -18,9 +18,39 @@ jobs:
       image: debian:12-slim
     outputs:
       v8-hash: ${{ steps.v8-hash.outputs.v8-hash }}
+    env:
+      GIT_VERSION: 2.46.4
     steps:
       - name: Checkout
         uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1  # v7.0.1
+      - name: Install recent Git
+        run: |
+          apt-get update
+          apt-get install -y \
+            build-essential \
+            ca-certificates \
+            curl \
+            gettext \
+            libcurl4-gnutls-dev \
+            libexpat1-dev \
+            libpcre2-dev \
+            libssl-dev \
+            zlib1g-dev
+
+          echo "::group::Install Git ${GIT_VERSION}"
+          curl -fsSL \
+            "https://www.kernel.org/pub/software/scm/git/git-${GIT_VERSION}.tar.gz" \
+            | tar -xz
+
+          cd "git-${GIT_VERSION}"
+          make -j"$(nproc)" prefix=/usr/local all
+          make prefix=/usr/local install
+          cd ..
+
+          rm -rf "git-${GIT_VERSION}"
+          echo "::endgroup::"
+
+          git --version
       - name: Install dependencies
         run: |
           apt-get update
