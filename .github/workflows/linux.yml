@@ -89,6 +89,17 @@ jobs:
             v8/out.gn/x64.release.sample/icudtl.dat
             v8/include
           key: linux-build-v8-${{ steps.v8-hash.outputs.v8-hash }}
+      # The artifact is the mechanism used to transfer V8 to downstream jobs.
+      # It is used regardless of whether V8 came from the cache or was built.
+      - name: Upload Google V8 artifact
+        uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a  # v7.0.1
+        with:
+          name: google-v8-linux
+          path: |
+            v8/out.gn/x64.release.sample/obj/libv8_monolith.a
+            v8/out.gn/x64.release.sample/icudtl.dat
+            v8/include
+          if-no-files-found: error
   build:
     name: Build Linux wheel (Python ${{ matrix.python-version }})
     needs: build-v8
@@ -142,15 +153,19 @@ jobs:
           cd boost_${{ matrix.boost-version-snake }}
           ./bootstrap.sh
           ./b2 install -j 8 --with-system --with-python --with-filesystem --with-iostreams --with-date_time --with-thread
-      - name: Restore Google V8 from cache
-        id: restore-v8
-        uses: actions/cache/restore@55cc8345863c7cc4c66a329aec7e433d2d1c52a9  # v6.1.0
+      - name: Download Google V8 artifact
+        uses: actions/download-artifact@3e5f45b2cfb9172054b4087a40e8e0b5a5461e7c  # v8.0.1
         with:
-          path: |
-            v8/out.gn/x64.release.sample/obj/libv8_monolith.a
-            v8/out.gn/x64.release.sample/icudtl.dat
-            v8/include
-          key: linux-build-v8-${{ needs.build-v8.outputs.v8-hash }}
+          name: google-v8-linux
+          path: .
+      - name: Verify Google V8 artifact
+        run: |
+          test -f v8/out.gn/x64.release.sample/obj/libv8_monolith.a
+          test -f v8/out.gn/x64.release.sample/icudtl.dat
+          test -d v8/include
+
+          echo "V8 binary:"
+          ls -lh v8/out.gn/x64.release.sample/obj/libv8_monolit
       - name: Set up Python environment
         run: |
           python3 -m venv /opt/stpyv8-venv
