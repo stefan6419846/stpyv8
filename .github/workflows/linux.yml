@@ -116,10 +116,12 @@ jobs:
             image: 'debian:12-slim'
             boost-version: '1.87.0'
             boost-version-snake: '1_87_0'
+            manylinux-platform: 'manylinux_2_31_x86_64'
           - python-version: '3.13'
             image: 'debian:13-slim'
             boost-version: '1.87.0'
             boost-version-snake: '1_87_0'
+            manylinux-platform: 'manylinux_2_39_x86_64'
     steps:
       - name: Checkout repository
         uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1  # v7.0.1
@@ -196,7 +198,7 @@ jobs:
       - name: Repair wheel
         run: |
           auditwheel show stpyv8-linux-wheelhouse-${{ matrix.python-version }}/*.whl
-          auditwheel repair --plat manylinux_2_31_x86_64 -w stpyv8-linux-${{ matrix.python-version }} stpyv8-linux-wheelhouse-${{ matrix.python-version }}/*.whl
+          auditwheel repair --plat ${{ matrix.manylinux-platform }} -w stpyv8-linux-${{ matrix.python-version }} stpyv8-linux-wheelhouse-${{ matrix.python-version }}/*.whl
       - name: Install wheel
         run: |
           python -m pip install stpyv8-linux-${{ matrix.python-version }}/*.whl
