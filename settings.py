@@ -7,6 +7,9 @@ DEPOT_HOME = os.environ.get("DEPOT_HOME", os.path.join(STPYV8_HOME, "depot_tools
 V8_HOME = os.environ.get("V8_HOME", os.path.join(STPYV8_HOME, "v8"))
 
 V8_GIT_URL = "https://chromium.googlesource.com/v8/v8.git"
+# 13.9.210
+# 14.9.209
+# 15.5.31
 V8_GIT_TAG_STABLE = "13.1.201.22"
 V8_GIT_TAG_MASTER = "master"
 V8_GIT_TAG = V8_GIT_TAG_STABLE
