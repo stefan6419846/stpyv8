@@ -144,22 +144,18 @@ jobs:
           - python-version: '3.11'
             image: 'debian:12-slim'
             boost-version: '1.92.0'
-            boost-version-snake: '1_92_0'
             manylinux-platform: 'manylinux_2_35_x86_64'
           - python-version: '3.12'
             image: 'ubuntu:24.04'
             boost-version: '1.92.0'
-            boost-version-snake: '1_92_0'
             manylinux-platform: 'manylinux_2_39_x86_64'
           - python-version: '3.13'
             image: 'debian:13-slim'
             boost-version: '1.92.0'
-            boost-version-snake: '1_92_0'
             manylinux-platform: 'manylinux_2_39_x86_64'
           - python-version: '3.14'
             image: 'debian:forky-slim'  # Debian 14
             boost-version: '1.92.0'
-            boost-version-snake: '1_92_0'
             manylinux-platform: 'manylinux_2_39_x86_64'
     steps:
       - name: Checkout repository
@@ -196,7 +192,7 @@ jobs:
         id: install-boost
         run: |
           tar -xJf ${{ steps.download-boost.outputs.filename }}
-          cd boost_${{ matrix.boost-version-snake }}
+          cd boost-${{ matrix.boost-version }}
           ./bootstrap.sh --with-libraries=python
           sudo ./b2 install -j 8 --with-system --with-python --with-filesystem --with-iostreams --with-date_time --with-thread
       - name: Check Boost.Python
