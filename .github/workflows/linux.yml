@@ -157,14 +157,15 @@ jobs:
         uses: actions/download-artifact@3e5f45b2cfb9172054b4087a40e8e0b5a5461e7c  # v8.0.1
         with:
           name: google-v8-linux
-          path: .
+          path: v8
       - name: Verify Google V8 artifact
         run: |
-          ls -l
-          ls -l v8
           test -f v8/out.gn/x64.release.sample/obj/libv8_monolith.a
+          echo "libv8_monolith.a exists"
           test -f v8/out.gn/x64.release.sample/icudtl.dat
+          echo "icudtl.dat exists"
           test -d v8/include
+          echo "include directory exists"
 
           echo "V8 binary:"
           ls -lh v8/out.gn/x64.release.sample/obj/libv8_monolit
