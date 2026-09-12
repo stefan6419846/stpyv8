@@ -1,6 +1,7 @@
-import sys
 import os
 import platform
+import re
+import sys
 
 STPYV8_HOME = os.path.dirname(os.path.realpath(__file__))
 DEPOT_HOME = os.environ.get("DEPOT_HOME", os.path.join(STPYV8_HOME, "depot_tools"))
@@ -103,6 +104,48 @@ def get_libboost_python_name():
     return BOOST_PYTHON_UBUNTU_MATRIX[release]
 
 
+def get_boost_version():
+    """Return the installed Boost version as (major, minor, patch)."""
+    boost_root = os.environ.get("BOOST_ROOT")
+
+    candidates = []
+
+    if boost_root:
+        candidates.append(
+            os.path.join(boost_root, "boost", "version.hpp")
+        )
+
+    # Common system installation location.
+    candidates.append("/usr/include/boost/version.hpp")
+
+    for version_header in candidates:
+        if not os.path.exists(version_header):
+            continue
+
+        with open(version_header, encoding="utf-8") as fd:
+            content = fd.read()
+
+        match = re.search(
+            r"#define\s+BOOST_VERSION\s+(\d+)",
+            content,
+        )
+
+        if match:
+            version = int(match.group(1))
+            return (
+                version // 100000,
+                (version // 100) % 1000,
+                version % 100,
+            )
+
+    raise RuntimeError(
+        "Could not determine Boost version. "
+        "Set BOOST_ROOT to the Boost installation directory."
+    )
+
+
+BOOST_VERSION = get_boost_version()
+
 STPYV8_BOOST_PYTHON = os.getenv(
     "STPYV8_BOOST_PYTHON", default=get_libboost_python_name()
 )
@@ -130,12 +173,16 @@ if os.name in ("nt",):
 
 elif os.name in ("posix",):
     libraries = [
-        "boost_system",
         "boost_iostreams",
         "boost_filesystem",
         "v8_monolith",
         STPYV8_BOOST_PYTHON.replace(".", ""),
     ]
+    # Boost.System no longer provides a compiled library in newer Boost releases.
+    if BOOST_VERSION < (1, 89, 0):
+        # Boost.System no longer provides a compiled library in newer Boost releases.
+if BOOST_VERSION < (1, 89, 0):
+    libraries.insert(0, "boost_system")libraries.insert(0, "boost_system")
 
     extra_compile_args.append("-Wno-strict-aliasing")
     extra_compile_args.append("-Wno-array-bounds")
