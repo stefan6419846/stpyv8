@@ -117,6 +117,7 @@ def get_boost_version():
 
     # Common system installation location.
     candidates.append("/usr/include/boost/version.hpp")
+    candidates.append("/usr/local/include/boost/version.hpp")
 
     for version_header in candidates:
         if not os.path.exists(version_header):
