@@ -1,21 +1,15 @@
 #!/usr/bin/env python
 
 import logging
-import os
 import shutil
 import subprocess
-import sys
 
 from setuptools import setup, Extension
 from setuptools.command.bdist_wheel import bdist_wheel
 from setuptools.command.build_ext import build_ext
 from setuptools.command.install import install
 
-try:
-    from settings import *  # pylint:disable=wildcard-import,unused-wildcard-import
-except ModuleNotFoundError:
-    sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
-    from settings import *  # pylint:disable=wildcard-import,unused-wildcard-import
+from settings import *  # pylint:disable=wildcard-import,unused-wildcard-import
 
 log = logging.getLogger()
 
