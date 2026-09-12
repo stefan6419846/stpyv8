@@ -180,9 +180,7 @@ elif os.name in ("posix",):
     ]
     # Boost.System no longer provides a compiled library in newer Boost releases.
     if BOOST_VERSION < (1, 89, 0):
-        # Boost.System no longer provides a compiled library in newer Boost releases.
-if BOOST_VERSION < (1, 89, 0):
-    libraries.insert(0, "boost_system")libraries.insert(0, "boost_system")
+        libraries.insert(0, "boost_system")
 
     extra_compile_args.append("-Wno-strict-aliasing")
     extra_compile_args.append("-Wno-array-bounds")
