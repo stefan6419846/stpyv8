@@ -142,6 +142,7 @@ def get_boost_version():
         "Could not determine Boost version. "
         "Set BOOST_ROOT to the Boost installation directory."
     )
+    return (0, 0, 0)
 
 
 BOOST_VERSION = get_boost_version()
