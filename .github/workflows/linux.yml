@@ -229,7 +229,7 @@ jobs:
           python -m pip install --upgrade build pip setuptools wheel auditwheel patchelf pytest pytest-order
       - name: Build wheel
         run: |
-          python -m build --outdir stpyv8-linux-wheelhouse-${{ matrix.python-version }}
+          python -m build --no-isolation --outdir stpyv8-linux-wheelhouse-${{ matrix.python-version }}
         env:
           INCLUDE: ${{ env.INCLUDE }};${{ steps.install-python.outputs.python-path
             }}include
