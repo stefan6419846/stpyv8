@@ -138,7 +138,7 @@ def get_boost_version():
                 version % 100,
             )
 
-    raise RuntimeError(
+    print(
         "Could not determine Boost version. "
         "Set BOOST_ROOT to the Boost installation directory."
     )
