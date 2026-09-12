@@ -3,6 +3,7 @@
 import logging
 import shutil
 import subprocess
+import sys
 
 from setuptools import setup, Extension
 from setuptools.command.bdist_wheel import bdist_wheel
