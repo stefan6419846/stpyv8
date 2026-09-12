@@ -186,7 +186,16 @@ class stpyv8_bdist_wheel(bdist_wheel):
         self.skip_build_v8 = None
 
     def run(self):
-        if not self.skip_build_v8:
+        # Support both the legacy:
+        #   python setup.py bdist_wheel --skip-build-v8
+        # and PEP 517 builds:
+        #   STPYV8_SKIP_BUILD_V8=1 python -m build
+        skip_build_v8 = (
+            self.skip_build_v8
+            or os.environ.get("STPYV8_SKIP_BUILD_V8") == "1"
+        )
+
+        if not skip_build_v8:
             prepare_v8()
 
         bdist_wheel.run(self)
