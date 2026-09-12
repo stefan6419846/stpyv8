@@ -1,1 +1,2 @@
 include settings.py
+recursive-include src *.cpp *.h
