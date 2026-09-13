@@ -236,7 +236,7 @@ jobs:
           INCLUDE: ${{ env.INCLUDE }};${{ steps.install-python.outputs.python-path
             }}include
           V8_DEPS_LINUX: 0
-          LDFLAGS: -fuse-ld=lld
+          LDFLAGS: -fuse-ld=lld -L/usr/local/lib -L/usr/lib/x86_64-linux-gnu
           STPYV8_SKIP_BUILD_V8: "1"
       - name: Repair wheel
         run: |
