@@ -27,6 +27,7 @@ gn_args = {
     "is_debug": "true" if os.environ.get("STPYV8_DEBUG") else "false",
     "treat_warnings_as_errors": "false",
     "use_custom_libcxx": "false",
+    "use_sysroot": "false",
     "v8_deprecation_warnings": "true",
     "v8_enable_disassembler": "false",
     "v8_enable_i18n_support": "true",
